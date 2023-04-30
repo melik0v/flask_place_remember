@@ -19,3 +19,23 @@ class User(UserMixin, db.Model):
     def __repr__(self) -> str:
         return f'<user {self.id}>'
 
+
+class Memory(db.Model):
+    __tablename__ = 'memories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128))
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    description = db.Column(db.String)
+    place = db.Column(db.String)
+
+    def __repr__(self):
+        return f'<memory {self.name}>'
+
+
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    memory = db.Column(db.Integer, db.ForeignKey(Memory.id))
+    image = db.Column(db.LargeBinary)
+
+    def __repr__(self):
+        return f'<image from memory {self.memory}>'

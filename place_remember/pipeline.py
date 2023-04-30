@@ -1,26 +1,8 @@
 import requests
 
 
-class UserInfo:
-    providers = None
-
-    def __init__(self, provider_name):
-        self.data = None
-        self.provider_name = provider_name
-
-    @classmethod
-    def get_provider(cls, provider_name):
-        if cls.providers is None:
-            cls.providers = {}
-            for provider_class in cls.__subclasses__():
-                provider = provider_class()
-                cls.providers[provider.provider_name] = provider
-        return cls.providers[provider_name]
-
-
-class UserInfoVK(UserInfo):
+class UserInfoVK:
     def __init__(self, user_id, token):
-        super().__init__('vk')
         self.data = {'user_id': user_id,
                      'v': '5.131',
                      'fields': 'photo',
@@ -43,9 +25,8 @@ class UserInfoVK(UserInfo):
         return None
 
 
-class UserInfoGoogle(UserInfo):
+class UserInfoGoogle:
     def __init__(self, token):
-        super().__init__('google')
         self.data = {
             'access_token': token,
         }

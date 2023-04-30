@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block scripts %}
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=d44c7945-2d1c-407c-849f-666a20744ccc&lang=ru_RU&coordorder=longlat" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='yandex_maps.js') }}" type="text/javascript" ></script>
+    {% endblock %}
+    {% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='memory_form.css') }}">
+    {% endblock %}
+
+    <title>
+      {% block title %}
+      {% if memory_form.name.data %}
+      {{ memory_form.name.data }}
+      {% else %}
+      Новое воспоминание
+      {% endif %}
+      {% endblock %}
+    </title>
+</head>
+<body>
+  {% block content %}
+  <div class="col-lg-6 offset-3">
+    <div class="toolbar">
+      {% if memory_form.name.data %}
+      <h1>{{ memory_form.name.data }}</h1>
+      {% else %}
+      <h1>Новое воспоминание</h1>
+      {% endif %}
+      <a href="{{ url_for('show_memories') }}">
+        <button class="btn btn-outline-danger">
+            Отмена
+        </button>
+      </a>
+    </div>
+
+    <form action="" method="post" enctype="multipart/form-data">
+{#        {% with messages = get_flashed_messages() %}#}
+{#        {% if messages %}#}
+{#        <ul>#}
+{#            {% for message in messages %}#}
+{#            <li>{{ message }}</li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+        {% for error in memory_form.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+      <div class="form">
+          {{ memory_form.csrf_token }}
+          {{ memory_form.name }}
+          {{ memory_form.place }}
+          {{ memory_form.description }}
+          <div id="map" style="width: auto; height: 500px;"></div>
+          {{ memory_form.submit }}
+      </div>
+    </form>
+  {% endblock %}
+
+</body>
+</html>

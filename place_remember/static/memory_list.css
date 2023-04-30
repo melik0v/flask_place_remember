@@ -1,0 +1,29 @@
+body {
+    background-color: #141414;
+}
+
+.memory-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    /* border: 1px solid red; */
+    border-radius: 1rem;
+    padding: 2rem;
+    margin: 0 1rem 1rem;
+    background-color: #212121;
+}
+
+.memory-title:hover {
+    color: #94a3ad;
+}
+
+.memory-title {
+    color: rgb(255, 255, 255);
+    word-wrap: break-word;
+}
+
+.btn {
+    min-width: 12rem;
+}

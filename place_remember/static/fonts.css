@@ -1,0 +1,59 @@
+/* Montserrat Regular */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('./fonts/Montserrat/Montserrat-Regular.ttf');
+    font-style: normal;
+    font-weight: 500;
+}
+
+/* Montserrat Bold */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('./fonts/Montserrat/Montserrat-Bold.ttf');
+    font-style: normal;
+    font-weight: 700;
+}
+
+/* Kaushan Script Regular */
+@font-face {
+    font-family: 'Kaushan Script';
+    font-style: normal;
+    font-weight: 500;
+
+    src: url('./fonts/Kaushan_Script/KaushanScript-Regular.ttf');
+}
+
+/* Pacifico */
+@font-face {
+    font-family: 'Pacifico';
+    font-style: normal;
+    font-weight: 500;
+
+    src: url('./fonts/Pacifico/Pacifico-Regular.ttf');
+}
+
+/* Vag World Bold */
+@font-face {
+    font-family: 'Vag World';
+    src: url('./fonts/Vag_World/vag-world.ttf');
+}
+
+/* Futura Round */
+@font-face {
+    font-family: 'Futura Round';
+    src: url('./fonts/Futura_Round/a_futuraround.woff2');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'Futura Round';
+    src: url('./fonts/Futura_Round/a_futuraround-bold.ttf');
+    font-weight: 700;
+}
+
+/* Lato */
+@font-face {
+    font-family: "Lato";
+    src: url('./fonts/Lato/Lato-Bold.ttf');
+    font-weight: 700;
+}

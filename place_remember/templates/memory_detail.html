@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block scripts %}
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=d44c7945-2d1c-407c-849f-666a20744ccc&lang=ru_RU" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='yandex_maps.js') }}" type="text/javascript" ></script>
+    {% endblock %}
+    {% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='memory_detail.css') }}">
+    {% endblock %}
+
+    <title>{% block title %}{{object.name}}{% endblock %}</title>
+</head>
+<body>
+    {% block content %}
+
+        <h1>{{object.name}}</h1>
+        {% if object.description != '' %}
+            <span class="description">{{object.description}}</span>
+        {% else %}
+            <span class="description">Описание не заполнено</span>
+        {% endif %}
+        <p id="id_place">{{object.place.as_hidden}}</p>
+        <div class="col-lg-8 photos">
+{#            {% if object.image_set.all %}#}
+{#                {% for image in object.image_set.all %}#}
+{#                    <img class="memory-photo" src="{{ image.image.url }}" alt="photo">#}
+{#                {% endfor %}#}
+{#            {% else %}#}
+{#                <h4>Нет фото</h4>#}
+{#            {% endif %}#}
+        </div>
+        <div class="col-lg-4">
+            <div class="toolbar">
+                <img class="map" src="https://static-maps.yandex.ru/1.x/?ll={{object.place}}&pt={{object.place}},comma&l=map&size=450,450&z=15" alt="map">
+                <a href="{{ url_for('memory_edit', memory_id=object.id) }}">
+                    <button class="btn btn-outline-secondary btn-lg">
+                        Редактировать
+                    </button>
+                </a>
+                <a href="{{ url_for('memory_delete', memory_id=object.id) }}">
+                    <button class="btn btn-outline-danger btn-lg">
+                        Удалить
+                    </button>
+                </a>
+            </div>
+        </div>
+    {% endblock %}
+</body>
+</html>

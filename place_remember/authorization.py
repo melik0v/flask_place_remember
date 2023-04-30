@@ -29,6 +29,7 @@ def init_config(app):
 
 class OAuthSignIn(object):
     providers = None
+    service = None
 
     def __init__(self, provider_name):
         self.provider_name = provider_name
@@ -101,13 +102,6 @@ class GoogleSignIn(OAuthSignIn):
             access_token_url='https://accounts.google.com/o/oauth2/token',
             base_url=''
         )
-
-    # def authorize(self):
-    #     return redirect(self.service.get_authorize_url(
-    #         scope='email',
-    #         response_type='code',
-    #         redirect_uri=self.get_callback_url())
-    #     )
 
     def callback(self):
         if 'code' not in request.args:

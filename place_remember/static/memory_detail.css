@@ -1,0 +1,40 @@
+body {
+    background-color: #141414;
+}
+
+h1 {
+    color: white;
+    border-bottom: 1px solid white;
+}
+
+.toolbar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    position: fixed;
+}
+
+.map {
+    border-radius: 50%;
+}
+
+.description {
+    color: white;
+    font-family: "Lato";
+}
+
+.photos {
+    margin-bottom: 0.5rem;
+}
+
+.memory-photo {
+    max-width: 40%;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.btn {
+    min-width: 12rem;
+}

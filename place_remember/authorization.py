@@ -9,7 +9,7 @@ from flask import (
 )
 
 
-dotenv_path = os.path.join('/', ".env")
+dotenv_path = os.path.join('/', '.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
@@ -48,7 +48,7 @@ class OAuthSignIn(object):
         pass
 
     def get_callback_url(self):
-        return url_for('oauth_callback', provider=self.provider_name,
+        return url_for('.oauth_callback', provider=self.provider_name,
                        _external=True)
 
     @classmethod

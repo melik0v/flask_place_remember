@@ -38,12 +38,12 @@
         <div class="col-lg-4">
             <div class="toolbar">
                 <img class="map" src="https://static-maps.yandex.ru/1.x/?ll={{object.place}}&pt={{object.place}},comma&l=map&size=450,450&z=15" alt="map">
-                <a href="{{ url_for('memory_edit', memory_id=object.id) }}">
+                <a href="{{ url_for('main.memory_edit', memory_id=object.id) }}">
                     <button class="btn btn-outline-secondary btn-lg">
                         Редактировать
                     </button>
                 </a>
-                <a href="{{ url_for('memory_delete', memory_id=object.id) }}">
+                <a href="{{ url_for('main.memory_delete', memory_id=object.id) }}">
                     <button class="btn btn-outline-danger btn-lg">
                         Удалить
                     </button>

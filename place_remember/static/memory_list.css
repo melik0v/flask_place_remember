@@ -27,3 +27,9 @@ body {
 .btn {
     min-width: 12rem;
 }
+
+.page-placeholder {
+    margin: auto auto;
+    text-align: center;
+    color: #4b4b4b;
+}

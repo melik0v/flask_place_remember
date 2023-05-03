@@ -17,18 +17,18 @@
 <body>
     <nav class="navbar navbar-dark bg-dark fixed-top">
         <div class="container">
-                <a href="{{ url_for('show_memories') }}">
+                <a href="{{ url_for('main.show_memories') }}">
                     <div class="avatar-name">
                         <img class="avatar" src="{{ user.avatar }}" alt="">
                         <span class="username">{{ user.first_name }} {{ user.last_name }}</span>
                     </div>
                 </a>
-                <a href="{{ url_for('create_memory') }}">
+                <a href="{{ url_for('main.create_memory') }}">
                     <button type="button" class="btn btn-dark btn-lg">
                         Добавить воспоминание
                       </button>
                 </a>
-                <a href="{{ url_for('logout') }}">
+                <a href="{{ url_for('main.logout') }}">
                     <button class="btn btn-outline-light">
                         Выйти
                     </button>

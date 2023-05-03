@@ -17,27 +17,35 @@
 </head>
 <body>
     {% block content %}
-    {% for memory in memories %}
-    <div class="col-lg-3">
-        <div class="memory-card">
-            <a class="memory-title" href="{{ url_for('memory_detail', memory_id=memory.id) }}">
-                <h3>{{ memory.name }}</h3>
-            </a>
+        {% if not memories %}
+            <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center" style="margin-top: -5rem">
+                <h1 class="page-placeholder">Пока у вас нет воспоминаний, исправьте это скорее :)</h1>
+            </div>
+        {% else %}
+            {% for memory in memories %}
+                <div class="col-lg-3">
+                    <div class="memory-card">
+                        <a class="memory-title" href="{{ url_for('main.memory_detail', memory_id=memory.id) }}">
+                            <h3>{{ memory.name }}</h3>
+                        </a>
 
-            <a href="{{ url_for('memory_edit', memory_id=memory.id) }}">
-                <button class="btn btn-outline-light btn-lg">
-                    Редактировать
-                </button>
-            </a>
+                        <a href="{{ url_for('main.memory_edit', memory_id=memory.id) }}">
+                            <button class="btn btn-outline-light btn-lg">
+                                Редактировать
+                            </button>
+                        </a>
 
-            <a href="{{ url_for('memory_delete', memory_id=memory.id) }}">
-                <button class="btn btn-outline-danger btn-lg">
-                    Удалить
-                </button>
-            </a>
-        </div>
-    </div>
-    {% endfor %}
+                        <a href="{{ url_for('main.memory_delete', memory_id=memory.id) }}">
+                            <button class="btn btn-outline-danger btn-lg">
+                                Удалить
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+        {% endif %}
 
     {% endblock %}
 </body>

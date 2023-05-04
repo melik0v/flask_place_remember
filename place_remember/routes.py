@@ -1,7 +1,6 @@
 from flask import (
     redirect,
     url_for,
-    flash,
     render_template,
     request,
     Blueprint,
@@ -13,124 +12,132 @@ from flask.views import (
 
 from flask_login import (
     current_user,
-    login_user,
-    logout_user,
     login_required,
 )
 from place_remember.extensions import db
-from place_remember.authorization import OAuthSignIn
-from place_remember.models import User, Memory
-from place_remember.pipeline import UserInfoVK, UserInfoGoogle
-from place_remember.forms import AddMemoryForm, AddImageForm
+from place_remember.models import Memory
+from place_remember.forms import AddMemoryForm
 
 main = Blueprint('main', __name__)
 
 
-@main.route('/')
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('.show_memories'))
-    return render_template('login_page.html')
+class ListView(View):
+
+    decorators = [
+        login_required
+    ]
+
+    def __init__(self, model, template):
+        self.model = model
+        self.template = template
+
+    def dispatch_request(self):
+        items = {
+            'memories': db.session.query(self.model).filter(self.model.user_id == current_user.get_id()).all(),
+            'user': current_user
+        }
+        return render_template(self.template, **items)
+    
+
+class DetailView(View):
+
+    decorators = [
+        login_required
+    ]
+    methods = ['GET', 'POST']
+
+    def __init__(self, model, template):
+        self.model = model
+        self.template = template
+
+    def dispatch_request(self, id):
+        items = {
+            'object': self.model.query.get_or_404(id),
+            'user': current_user
+        }
+        return render_template(self.template, **items)
 
 
-@main.route('/memories')
-@login_required
-def show_memories():
-    memories = db.session.query(Memory).filter(Memory.user_id == current_user.get_id()).all()
-    return render_template('memory_list.html', user=current_user, memories=memories)
+class UpdateView(View):
+
+    decorators = [
+        login_required
+    ]       
+    methods = ['GET', 'POST']
+
+    def __init__(self, model, template):
+        self.model = model
+        self.template = template
 
 
-@main.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('.login'))
+    def dispatch_request(self, id):
+        memory = self.model.query.get_or_404(id)
+        form = AddMemoryForm(obj=memory)
+
+        if form.validate_on_submit() and request.method == 'POST':
+            form.populate_obj(memory)
+            db.session.commit()
+            return redirect(url_for('.memory_detail', id=id))
+
+        items = {
+            'object': memory,
+            'user': current_user,
+            'memory_form': form
+        }
+        return render_template(self.template, **items)
 
 
-@main.route('/authorize/<provider>')
-def oauth_authorize(provider):
-    if not current_user.is_anonymous:
-        return redirect(url_for('.login'))
-    oauth = OAuthSignIn.get_provider(provider)
-    return oauth.authorize()
+class DeleteView(View):
+    decorators = [
+        login_required
+    ]       
+    methods = ['GET', 'POST']
 
+    def __init__(self, model):
+        self.model = model
 
-@main.route('/callback/<provider>')
-def oauth_callback(provider):
-    if not current_user.is_anonymous:
-        return redirect(url_for('.show_memories'))
-    oauth = OAuthSignIn.get_provider(provider)
-    social_id, token = oauth.callback()
-    if social_id is None:
-        flash('Authentication failed.')
-        return redirect(url_for('.login'))
-
-    user = User.query.filter_by(social_id=social_id).first()
-
-    match provider:
-        case 'google':
-            user_info = UserInfoGoogle(token)
-        case 'vk':
-            user_info = UserInfoVK(social_id, token)
-        case _:
-            user_info = None
-
-    if not user:
-        first_name, last_name = user_info.get_firstname_lastname()
-        user = User(
-            social_id=social_id,
-            first_name=first_name,
-            last_name=last_name,
-            access_token=token,
-            avatar=user_info.get_avatar()
-        )
-        db.session.add(user)
+    def dispatch_request(self, id):
+        memory = db.session.get(self.model, id)
+        db.session.delete(memory)
         db.session.commit()
-
-    login_user(user, True)
-    return redirect(url_for('.login'))
-
-
-@main.route('/memories/create', methods=['POST', 'GET'])
-@login_required
-def create_memory():
-    memory_form = AddMemoryForm()
-    image_form = AddImageForm()
-    if memory_form.validate_on_submit() and request.method == 'POST':
-        memory = Memory(
-            name=memory_form.name.data,
-            description=memory_form.description.data,
-            place=memory_form.place.data,
-            user_id=current_user.get_id()
-        )
-        db.session.add(memory)
-        db.session.commit()
         return redirect(url_for('.show_memories'))
-    return render_template('memory_form.html', memory_form=memory_form, image_form=image_form, user=current_user)
+    
+
+class CreateView(View):
+
+    decorators = [
+        login_required
+    ]       
+    methods = ['GET', 'POST']
+
+    def __init__(self, model, template):
+        self.model = model
+        self.template = template
+    
+    def dispatch_request(self):
+        form = AddMemoryForm()
+        if form.validate_on_submit() and request.method == 'POST':
+            memory = self.model(
+                name=form.name.data,
+                description=form.description.data,
+                place=form.place.data,
+                user_id=current_user.get_id()
+            )
+            db.session.add(memory)
+            db.session.commit()
+
+            return redirect(url_for('.show_memories'))
+        
+        items = {
+                'memory_form': form,
+                'user': current_user
+            }
+        
+        return render_template(self.template, **items)
 
 
-@main.route('/memories/<int:memory_id>')
-@login_required
-def memory_detail(memory_id):
-    memory = Memory.query.filter(Memory.id == memory_id).first()
-    return render_template('memory_detail.html', object=memory, user=current_user)
-
-
-@main.route('/memories/<int:memory_id>/edit', methods=['POST', 'GET'])
-@login_required
-def memory_edit(memory_id):
-    image_form = AddImageForm()
-    memory = db.session.get(Memory, memory_id)
-    memory_form = AddMemoryForm(obj=memory)
-    if memory_form.validate_on_submit() and request.method == 'POST':
-        memory_form.populate_obj(memory)
-        db.session.commit()
-        return redirect(url_for('.memory_detail', memory_id=memory_id))
-    return render_template('memory_form.html', memory_form=memory_form, image_form=image_form, user=current_user)
-
-
-@main.route('/memories/<int:memory_id>/delete')
-def memory_delete(memory_id):
-    memory = Memory.query.get(memory_id)
-    db.session.delete(memory)
-    db.session.commit()
-    return redirect(url_for('.show_memories'))
+main.add_url_rule('/memories', view_func=ListView.as_view('show_memories', Memory, 'memory_list.html'))
+main.add_url_rule('/memories/<int:id>', view_func=DetailView.as_view('memory_detail', Memory, 'memory_detail.html'))
+main.add_url_rule('/memories/<int:id>/edit', view_func=UpdateView.as_view('memory_edit', Memory, 'memory_form.html'))
+main.add_url_rule('/memories/<int:id>/delete', view_func=DeleteView.as_view('memory_delete', Memory))
+main.add_url_rule('/memories/create', view_func=CreateView.as_view('create_memory', Memory, 'memory_form.html'))

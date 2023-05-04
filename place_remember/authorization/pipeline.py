@@ -1,30 +1,12 @@
 import os
 from rauth import OAuth2Service
-from dotenv import load_dotenv
 from flask import (
     current_app,
     url_for,
     redirect,
     request,
 )
-
-
-dotenv_path = os.path.join('/', '.env')
-if os.path.exists(dotenv_path):
-    load_dotenv(dotenv_path)
-
-
-def init_config(app):
-    app.config['OAUTH_CREDENTIALS'] = {
-        'vk': {
-            'id': os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY'),
-            'secret': os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
-        },
-        'google': {
-            'id': os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY'),
-            'secret': os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
-        }
-    }
+import requests
 
 
 class OAuthSignIn(object):
@@ -118,3 +100,47 @@ class GoogleSignIn(OAuthSignIn):
         return user_id, token
 
 
+class UserInfoVK:
+    def __init__(self, user_id, token):
+        self.data = {'user_id': user_id,
+                     'v': '5.131',
+                     'fields': 'photo',
+                     'access_token': token,
+                     }
+
+    def get_avatar(self):
+        response = requests.get('https://api.vk.com/method/users.get', params=self.data)
+        if response.json():
+            avatar = response.json().get('response')[0]['photo']
+            return avatar
+        return None
+
+    def get_firstname_lastname(self):
+        response = requests.get('https://api.vk.com/method/users.get', params=self.data)
+        if response.json():
+            user_info = response.json().get('response')[0]
+            first_name, last_name = user_info['first_name'], user_info['last_name']
+            return first_name, last_name
+        return None
+
+
+class UserInfoGoogle:
+    def __init__(self, token):
+        self.data = {
+            'access_token': token,
+        }
+
+    def get_avatar(self):
+        response = requests.get('https://www.googleapis.com/oauth2/v1/userinfo?alt=json', params=self.data)
+        if response.json():
+            avatar = response.json()['picture']
+            return avatar
+        return None
+
+    def get_firstname_lastname(self):
+        response = requests.get('https://www.googleapis.com/oauth2/v1/userinfo?alt=json', params=self.data)
+        if response.json():
+            user_info = response.json()
+            first_name, last_name = user_info['given_name'], user_info['family_name']
+            return first_name, last_name
+        return None

@@ -25,17 +25,17 @@
             {% for memory in memories %}
                 <div class="col-lg-3">
                     <div class="memory-card">
-                        <a class="memory-title" href="{{ url_for('main.memory_detail', memory_id=memory.id) }}">
+                        <a class="memory-title" href="{{ url_for('main.memory_detail', id=memory.id) }}">
                             <h3>{{ memory.name }}</h3>
                         </a>
 
-                        <a href="{{ url_for('main.memory_edit', memory_id=memory.id) }}">
+                        <a href="{{ url_for('main.memory_edit', id=memory.id) }}">
                             <button class="btn btn-outline-light btn-lg">
                                 Редактировать
                             </button>
                         </a>
 
-                        <a href="{{ url_for('main.memory_delete', memory_id=memory.id) }}">
+                        <a href="{{ url_for('main.memory_delete', id=memory.id) }}">
                             <button class="btn btn-outline-danger btn-lg">
                                 Удалить
                             </button>

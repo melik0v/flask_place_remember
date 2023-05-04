@@ -2,12 +2,13 @@ import os
 
 from dotenv import load_dotenv
 from flask import Flask
-from .extensions import db, lm
-from .models import User
-from .routes import main
+from place_remember.extensions import db, lm
+from place_remember.models import User
+from place_remember.routes import main
+from place_remember.authorization.routes import auth
 
 
-dotenv_path = os.path.join('../', '.env')
+dotenv_path = '.env'
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
@@ -28,6 +29,7 @@ def create_app(database_uri='sqlite:///database.db', csrf=True):
         return db.session.get(User, int(user_id))
 
     app.register_blueprint(main)
+    app.register_blueprint(auth)
     
     return app
 

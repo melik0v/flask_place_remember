@@ -22,14 +22,14 @@
                 <div class="form">
                     <h1 class="title">Place Remember</h1>
                     <div class="buttons">
-                        <a href="{{ url_for('main.oauth_authorize', provider='vk') }}">
+                        <a href="{{ url_for('auth.oauth_authorize', provider='vk') }}">
                             <button class="btn">
                                 <img src="" alt="" class="btn-icon">
                                 Войти с помощью VK
                             </button>
                         </a>
 
-                        <a href="{{ url_for('main.oauth_authorize', provider='google') }}">
+                        <a href="{{ url_for('auth.oauth_authorize', provider='google') }}">
                             <button class="btn">
                                 <img src="" alt="" class="btn-icon">
                                 Войти с помощью Google

@@ -75,7 +75,7 @@ def test_get_memory_detail(client, app):
         db.session.add(test_memory_1)
         db.session.commit()
 
-        memory = Memory.query.filter(Memory.id == test_memory_1.id).first()
+        memory = db.session.query(Memory).filter(Memory.id == test_memory_1.id).first()
 
         response = client.get('/memories/1', query_string={
             'user': current_user,

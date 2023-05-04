@@ -30,12 +30,3 @@ class Memory(db.Model):
 
     def __repr__(self):
         return f'<memory {self.name}>'
-
-
-class Image(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    memory = db.Column(db.Integer, db.ForeignKey(Memory.id))
-    image = db.Column(db.LargeBinary)
-
-    def __repr__(self):
-        return f'<image from memory {self.memory}>'

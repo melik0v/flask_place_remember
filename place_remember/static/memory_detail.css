@@ -7,6 +7,10 @@ h1 {
     border-bottom: 1px solid white;
 }
 
+h4 {
+    color: #4b4b4b;
+}
+
 .toolbar {
     display: flex;
     flex-direction: column;

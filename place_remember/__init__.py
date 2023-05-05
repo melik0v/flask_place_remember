@@ -21,6 +21,9 @@ def create_app(database_uri='sqlite:///database.db', csrf=True):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
+    app.config['UPLOAD_FOLDER'] = 'uploads/'
+    app.config['ALLOWED_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
     db.init_app(app)
     lm.init_app(app)
 

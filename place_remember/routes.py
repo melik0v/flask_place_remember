@@ -14,8 +14,10 @@ from flask_login import (
     current_user,
     login_required,
 )
-from place_remember.extensions import db
-from place_remember.models import Memory
+from werkzeug.utils import secure_filename
+
+from place_remember.extensions import db, UPLOAD_FOLDER
+from place_remember.models import Memory, Image
 from place_remember.forms import AddMemoryForm
 
 main = Blueprint('main', __name__)
@@ -53,8 +55,10 @@ class DetailView(View):
     def dispatch_request(self, id):
         items = {
             'object': self.model.query.get_or_404(id),
-            'user': current_user
+            'user': current_user,
+            'images': db.session.query(Image).filter(Image.memory == id).all()
         }
+        # print(db.session.query(Image).filter(Image.memory == id).all())
         return render_template(self.template, **items)
 
 
@@ -117,13 +121,27 @@ class CreateView(View):
     def dispatch_request(self):
         form = AddMemoryForm()
         if form.validate_on_submit() and request.method == 'POST':
+           
             memory = self.model(
                 name=form.name.data,
                 description=form.description.data,
                 place=form.place.data,
-                user_id=current_user.get_id()
+                user_id=current_user.get_id(),
             )
             db.session.add(memory)
+            db.session.commit()
+
+            for item in form.images.data['images']:
+                print(item.filename)
+                filename = secure_filename(item.filename)
+                item.save(UPLOAD_FOLDER + filename)
+
+                image = Image(
+                    image=UPLOAD_FOLDER + filename,
+                    memory=memory.id
+                )
+                db.session.add(image)
+
             db.session.commit()
 
             return redirect(url_for('.show_memories'))

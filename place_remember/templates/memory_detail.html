@@ -27,13 +27,13 @@
         {% endif %}
         <p id="id_place">{{object.place.as_hidden}}</p>
         <div class="col-lg-8 photos">
-{#            {% if object.image_set.all %}#}
-{#                {% for image in object.image_set.all %}#}
-{#                    <img class="memory-photo" src="{{ image.image.url }}" alt="photo">#}
-{#                {% endfor %}#}
-{#            {% else %}#}
-{#                <h4>Нет фото</h4>#}
-{#            {% endif %}#}
+            {% if images %}
+                {% for image in images %}
+                    <img class="memory-photo" src="{{ url_for('static', filename=image.image) }}" alt="photo">
+                {% endfor %}
+            {% else %}
+                <h4>Нет фото</h4>
+            {% endif %}
         </div>
         <div class="col-lg-4">
             <div class="toolbar">

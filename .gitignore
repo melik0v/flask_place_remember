@@ -17,6 +17,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+place_remember/static/uploads/*
 .Python
 build/
 develop-eggs/

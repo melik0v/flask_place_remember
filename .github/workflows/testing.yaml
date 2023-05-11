@@ -3,14 +3,14 @@ on: [push, workflow_dispatch]
 jobs:
 
   lint:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Get repository code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
         uses: actions/checkout@v3
-        - name: Install dependencies
-          run: pip install -r requirements.txt
-        - name: Run flake8
-          run: flake8 .
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run flake8
+        run: flake8 .
 
   test:
     runs-on: ubuntu-latest

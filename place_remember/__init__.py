@@ -2,11 +2,11 @@ import os
 
 from dotenv import load_dotenv
 from flask import Flask
+
+from place_remember.authorization.routes import auth
 from place_remember.extensions import db, lm
 from place_remember.models import User
 from place_remember.routes import main
-from place_remember.authorization.routes import auth
-
 
 dotenv_path = ".env"
 if os.path.exists(dotenv_path):

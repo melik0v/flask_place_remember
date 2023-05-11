@@ -1,20 +1,10 @@
-from flask import (
-    redirect,
-    url_for,
-    render_template,
-    request,
-    Blueprint,
-)
-
+from flask import Blueprint, redirect, render_template, request, url_for
 from flask.views import View
+from flask_login import current_user, login_required
 
-from flask_login import (
-    current_user,
-    login_required,
-)
 from place_remember.extensions import db
-from place_remember.models import Memory
 from place_remember.forms import AddMemoryForm
+from place_remember.models import Memory
 
 main = Blueprint("main", __name__)
 

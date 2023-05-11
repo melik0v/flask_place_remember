@@ -5,20 +5,23 @@ from place_remember import db
 
 
 def test_login_page(client):
-    response = client.get('/')
-    assert b'<title>Place Remember</title>' in response.data
+    response = client.get("/")
+    assert b"<title>Place Remember</title>" in response.data
 
 
 def test_add_memory(client, app):
     with app.test_request_context():
-        client.post('/memories/create', data={
-            'name': 'test name',
-            'place': '92.852571,56.010566',
-            'description': 'test_description',
-            'submit': True
-        })
+        client.post(
+            "/memories/create",
+            data={
+                "name": "test name",
+                "place": "92.852571,56.010566",
+                "description": "test_description",
+                "submit": True,
+            },
+        )
         assert db.session.query(Memory).count() == 1
-        assert db.session.query(Memory).first().name == 'test name'
+        assert db.session.query(Memory).first().name == "test name"
 
 
 def test_get_memory_list(client, app):
@@ -29,33 +32,36 @@ def test_get_memory_list(client, app):
 
         # mock memory
         test_memory_1 = Memory(
-            name='test_name_1',
+            name="test_name_1",
             user_id=test_user.id,
-            description='test_desc_1',
-            place='92.852571,56.010566',
+            description="test_desc_1",
+            place="92.852571,56.010566",
         )
 
         test_memory_2 = Memory(
-            name='test_name_2',
+            name="test_name_2",
             user_id=test_user.id,
-            description='test_desc_2',
-            place='92.852571,56.010566',
+            description="test_desc_2",
+            place="92.852571,56.010566",
         )
 
         db.session.add(test_memory_1)
         db.session.add(test_memory_2)
         db.session.commit()
 
-        memories = db.session.query(Memory).filter(Memory.user_id == current_user.get_id()).all()
+        memories = (
+            db.session.query(Memory)
+            .filter(Memory.user_id == current_user.get_id())
+            .all()
+        )
 
-        response = client.get('/memories', query_string={
-            'user': test_user,
-            'memories': memories
-        })
+        response = client.get(
+            "/memories", query_string={"user": test_user, "memories": memories}
+        )
 
     assert response.status_code == 200
-    assert b'<h3>test_name_1</h3>' in response.data
-    assert b'<h3>test_name_2</h3>' in response.data
+    assert b"<h3>test_name_1</h3>" in response.data
+    assert b"<h3>test_name_2</h3>" in response.data
 
 
 def test_get_memory_detail(client, app):
@@ -66,10 +72,10 @@ def test_get_memory_detail(client, app):
 
         # mock memory
         test_memory_1 = Memory(
-            name='test_name_1',
+            name="test_name_1",
             user_id=test_user.id,
-            description='test_desc_1',
-            place='92.852571,56.010566',
+            description="test_desc_1",
+            place="92.852571,56.010566",
         )
 
         db.session.add(test_memory_1)
@@ -77,13 +83,12 @@ def test_get_memory_detail(client, app):
 
         memory = db.session.query(Memory).filter(Memory.id == test_memory_1.id).first()
 
-        response = client.get('/memories/1', query_string={
-            'user': current_user,
-            'object': memory
-        })
+        response = client.get(
+            "/memories/1", query_string={"user": current_user, "object": memory}
+        )
 
     assert response.status_code == 200
-    assert b'<h1>test_name_1</h1>' in response.data
+    assert b"<h1>test_name_1</h1>" in response.data
     assert b'<span class="description">test_desc_1</span>' in response.data
 
 
@@ -95,10 +100,10 @@ def test_delete_memory(client, app):
 
         # mock memory
         test_memory_1 = Memory(
-            name='test_name_1',
+            name="test_name_1",
             user_id=test_user.id,
-            description='test_desc_1',
-            place='92.852571,56.010566',
+            description="test_desc_1",
+            place="92.852571,56.010566",
         )
 
         db.session.add(test_memory_1)
@@ -107,7 +112,7 @@ def test_delete_memory(client, app):
         assert db.session.query(Memory).count() == 1
         assert db.session.query(Memory).first() == test_memory_1
 
-        client.get('/memories/1/delete')
+        client.get("/memories/1/delete")
 
         assert db.session.query(Memory).count() == 0
         assert db.session.query(Memory).first() is None
@@ -121,10 +126,10 @@ def test_memory_edit(client, app):
 
         # mock memory
         test_memory_1 = Memory(
-            name='old name',
+            name="old name",
             user_id=test_user.id,
-            description='old description',
-            place='92.852571,56.010566',
+            description="old description",
+            place="92.852571,56.010566",
         )
 
         db.session.add(test_memory_1)
@@ -135,12 +140,15 @@ def test_memory_edit(client, app):
         old_place = test_memory_1.place
         old_id = test_memory_1.id
 
-        client.post('/memories/1/edit', data={
-            'name': 'new name',
-            'place': '92.852571,56.010566',
-            'description': 'new description',
-            'submit': True
-        })
+        client.post(
+            "/memories/1/edit",
+            data={
+                "name": "new name",
+                "place": "92.852571,56.010566",
+                "description": "new description",
+                "submit": True,
+            },
+        )
 
         new_name = test_memory_1.name
         new_desc = test_memory_1.description

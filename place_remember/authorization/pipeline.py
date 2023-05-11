@@ -1,11 +1,6 @@
-from rauth import OAuth2Service
-from flask import (
-    current_app,
-    url_for,
-    redirect,
-    request,
-)
 import requests
+from flask import current_app, redirect, request, url_for
+from rauth import OAuth2Service
 
 
 class OAuthSignIn(object):

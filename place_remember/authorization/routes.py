@@ -1,19 +1,13 @@
-from flask import redirect, url_for, flash, render_template, Blueprint
+from flask import Blueprint, flash, redirect, render_template, url_for
+from flask_login import current_user, login_user, logout_user
 
-from place_remember.extensions import db
-
-from place_remember.models import User
 from place_remember.authorization.pipeline import (
     OAuthSignIn,
-    UserInfoVK,
     UserInfoGoogle,
+    UserInfoVK,
 )
-
-from flask_login import (
-    current_user,
-    login_user,
-    logout_user,
-)
+from place_remember.extensions import db
+from place_remember.models import User
 
 auth = Blueprint("auth", __name__)
 

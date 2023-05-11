@@ -8,6 +8,7 @@ def app():
     app = create_app('sqlite://', csrf=False)
     app.config["LOGIN_DISABLED"] = True
     app.config["TESTING"] = True
+    app.config["SECRET_KEY"] = "TEST"
     with app.test_request_context():
         db.create_all()
         test_user = User(

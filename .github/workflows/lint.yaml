@@ -1,5 +1,5 @@
 name: Lint project
-on: push, workflow-dispatch
+on: [push, workflow_dispatch]
 
 jobs:
   lint:

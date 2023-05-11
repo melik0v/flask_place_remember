@@ -1,0 +1,17 @@
+name: lint_project
+
+on: 
+  commit:
+    branches: ["master"]
+  push:
+    branches: ["master"]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run flake8
+        run: flake 8 .
+      - name: Run mypy
+        run: mypy .

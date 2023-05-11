@@ -8,21 +8,18 @@ from place_remember.routes import main
 from place_remember.authorization.routes import auth
 
 
-dotenv_path = '.env'
+dotenv_path = ".env"
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
 
-def create_app(database_uri='sqlite:///database.db', csrf=True):
+def create_app(database_uri="sqlite:///database.db", csrf=True):
     app = Flask(__name__)
 
-    app.config['WTF_CSRF_ENABLED'] = csrf
-    app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-
-    app.config['UPLOAD_FOLDER'] = 'uploads/'
-    app.config['ALLOWED_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+    app.config["WTF_CSRF_ENABLED"] = csrf
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
     db.init_app(app)
     lm.init_app(app)
@@ -33,7 +30,5 @@ def create_app(database_uri='sqlite:///database.db', csrf=True):
 
     app.register_blueprint(main)
     app.register_blueprint(auth)
-    
-    return app
 
-from place_remember import routes
+    return app

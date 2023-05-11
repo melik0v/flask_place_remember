@@ -20,20 +20,13 @@
     {% block content %}
 
         <h1>{{object.name}}</h1>
-        {% if object.description != '' %}
-            <span class="description">{{object.description}}</span>
-        {% else %}
-            <span class="description">Описание не заполнено</span>
-        {% endif %}
-        <p id="id_place">{{object.place.as_hidden}}</p>
-        <div class="col-lg-8 photos">
-            {% if images %}
-                {% for image in images %}
-                    <img class="memory-photo" src="{{ url_for('static', filename=image.image) }}" alt="photo">
-                {% endfor %}
+        <div class="col-lg-8">
+            {% if object.description != '' %}
+                <span class="description">{{object.description}}</span>
             {% else %}
-                <h4>Нет фото</h4>
+                <span class="description">Описание не заполнено</span>
             {% endif %}
+            <p id="id_place">{{object.place.as_hidden}}</p>
         </div>
         <div class="col-lg-4">
             <div class="toolbar">

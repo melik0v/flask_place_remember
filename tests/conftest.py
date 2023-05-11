@@ -1,5 +1,4 @@
 import pytest
-from flask_login import login_user
 from place_remember.models import User
 from place_remember import create_app, db
 
@@ -20,7 +19,6 @@ def app():
         )
         db.session.add(test_user)
         db.session.commit()
-        # login_user(test_user, True)
 
     yield app
 

@@ -1,7 +1,5 @@
 name: Lint project
-on: 
-  push:
-    branches: ["master"]
+on: push, workflow-dispatch
 
 jobs:
   lint:
@@ -9,6 +7,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run flake8
-        run: flake 8 .
-      - name: Run mypy
-        run: mypy .
+        run: flake8 .

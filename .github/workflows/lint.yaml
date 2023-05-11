@@ -1,8 +1,5 @@
-name: lint_project
-
+name: Lint project
 on: 
-  commit:
-    branches: ["master"]
   push:
     branches: ["master"]
 

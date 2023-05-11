@@ -1,7 +1,5 @@
 name: Test project
 on: 
-  commit:
-    branches: ["master"]
   push:
     branches: ["master"]
 jobs:

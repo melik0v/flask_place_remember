@@ -19,5 +19,5 @@ repos:
     -   id: run-tests
         language: script
         name: Run tests
-        entry: ./run_tests.sh
+        entry: ./pre-commit.sh
         stages: [commit]

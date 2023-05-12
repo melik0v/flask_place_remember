@@ -18,4 +18,6 @@ run
 
 in virtual environment to activate hooks
 
-If you work on Windows remove 'run-tests' hook from pre-commit-config.yaml
+If you work on Windows comment or remove 'run-tests' hook from pre-commit-config.yaml
+
+In case you work on Linux uncomment 'run-tests' hook otherwise tests will not run before the commit.

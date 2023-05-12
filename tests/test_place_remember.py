@@ -1,7 +1,7 @@
 from flask_login import current_user, login_user
 
-from place_remember.models import Memory, User
 from place_remember import db
+from place_remember.models import Memory, User
 
 
 def test_login_page(client):
